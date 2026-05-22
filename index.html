@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>舊金山優勝美地公路旅行</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Handlee&family=Noto+Sans+TC:wght@300;400;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fdfbf7;
+            color: #5c544d;
+        }
+
+        .sticker-card {
+            background-color: white;
+            box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e5e5;
+            transition: transform 0.2s;
+        }
+
+        .tab-active {
+            background-color: #5c544d !important;
+            color: white !important;
+        }
+
+        /* 垂直時間軸顏色設定 */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #5c544d; 
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div id="app" class="max-w-xl mx-auto">
+        <header class="text-center mb-6">
+            <div class="rounded-2xl overflow-hidden shadow-lg mb-4 h-48 relative">
+                <img src="https://i.postimg.cc/PJQPkc5Z/420C29C8-91FB-FCD7-5D62-9101354EE0BC.jpg" alt="Yosemite" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/20"></div>
+                <h1 class="absolute bottom-4 left-4 text-3xl font-bold text-white drop-shadow-md">舊金山 ✈ 優勝美地</h1>
+            </div>
+        </header>
+
+        <nav class="flex justify-center gap-4 mb-8">
+            <button id="nav-itinerary" onclick="showPage('itinerary')" class="px-6 py-2 rounded-full sticker-card tab-active">🗺️ 行程</button>
+            <button id="nav-tools" onclick="showPage('tools')" class="px-6 py-2 rounded-full sticker-card">💵 匯率換算</button>
+        </nav>
+
+        <div id="content-area">
+        </div>
+    </div>
+
+<script>
+    const itinerary = {
+        day1: {
+            tabDay: "Day 1",
+            tabDate: "June 8",
+            title: "Day 1: 抵達與補給",
+            items: [
+                { type: 'location', name: "SFO 機場取車", address: "San Francisco International Airport, CA", note: "辦理租車手續，檢查車況" },
+                { type: 'location', name: "San Francisco Premium Outlets", address: "2774 Livermore Outlets Dr, Livermore, CA 95341", note: "營業時間: 10:00–20:00" },
+                { 
+                    type: 'location',
+                    name: "🛒 超市選擇", 
+                    address: "Merced, CA", 
+                    note: "抵達住宿前，先購買露營零食與生鮮補給品。",
+                    subOptions: [
+                        { name: "Costco Wholesale", desc: "Merced 店", address: "1445 E Childs Ave, Merced, CA 95341", icon: "🛒" },
+                        { name: "Target", desc: "Merced 店", address: "3000 G St, Merced, CA 95340", icon: "🎯" }
+                    ]
+                },
+                { type: 'location', name: "入住 Mariposa Lodge", address: "5052 California 140 Unit 7, Mariposa, CA 95338", note: "入住 16:00-22:00 / 退房 07:00-11:00" }
+            ]
+        },
+        day2: {
+            tabDay: "Day 2",
+            tabDate: "June 9",
+            title: "Day 2: 初探谷地・三大地標與瀑布巡禮",
+            items: [
+                { type: 'location', name: "隧道觀景點 (Tunnel View)", address: "Tunnel View, Wawona Rd, Yosemite Valley, CA 95389",image: "https://i.postimg.cc/J7yzRsGk/tunnel-view-before-2008.jpg", note: "清晨07:30入園，捕捉酋長岩晨光" },
+                { type: 'location', name: "新娘面紗瀑布 (Bridalveil Fall)", address: "Bridalveil Fall, Yosemite Valley, CA 95389",image: "https://i.postimg.cc/qMxVrrXG/sqlqcxx7jjftsgei2wjb.webp", note: "漫步平坦短步道，感受壯觀水氣" },
+                { type: 'location', name: "下優勝美地瀑布 (Lower Yosemite Fall)", address: "Lower Yosemite Fall Trailhead, Yosemite Valley, CA 95389",image: "https://i.postimg.cc/RVVG3zxK/B142F689-E954-B67A-F7FA7AEB24D9A68D.jpg", note: "輕鬆環狀步道，近距離仰望北美最高瀑布的最下層" },
+                { type: 'location', name: "優勝美地村 (Yosemite Village) 午餐與休息", address: "Yosemite Village, CA 95389", note: "Degnan's Kitchen 享用午餐，參觀安塞爾·亞當斯藝廊" },
+                { type: 'location', name: "酋長岩草坪 (El Capitan Meadow) 放空", address: "El Capitan Meadow, Yosemite Valley, CA 95389",image: "https://i.postimg.cc/43KSYRtB/el-capitan-meadow-yosemite-elopement-1.jpg",note: "仰望世界最大的單體花崗岩巨壁，尋找攀岩者" },
+                { type: 'location', name: "庫克草坪步道 (Cook's Meadow Loop) 落日漫步", address: "Cook's Meadow Loop, Yosemite Valley, CA 95389", note: "捕捉半圓丘夕陽金黃色奇景" }
+            ]
+        },
+        day3: {
+            tabDay: "Day 3",
+            tabDate: "June 10",
+            title: "Day 3: 高能挑戰！經典迷霧步道與鏡湖",
+            items: [
+                { 
+                    type: 'location', 
+                    name: "停車轉乘", 
+                    address: "Yosemite Valley, CA", 
+                    note: "建議早上 08:00 前把車停在 Valley Lodge 或 Curry Village，隨後全程利用園區內免費的接駁車（Shuttle Bus）移動。",
+                    subOptions: [
+                        { name: "Valley Lodge", desc: "優勝美地谷地旅館", address: "Yosemite Valley Lodge, Yosemite Valley, CA 95389", icon: "🅿️" },
+                        { name: "Curry Village", desc: "咖哩村", address: "Curry Village, Yosemite Valley, CA 95389", icon: "🅿️" }
+                    ] 
+                },
+                { type: 'transport', text: "⬇️ 移動方式：搭接駁車至16號站(Happy Isles)" },
+                { type: 'location', name: "🥾 必去！迷霧步道健行", address: "Mist Trail, Yosemite Valley, CA 95389",image: "https://i.postimg.cc/528mT9BN/xia-zai.jpg",note: "沿著急流拾級而上，挑戰攀登花崗岩石階直達 Vernal Fall（春季瀑布）頂端（往返約 4 公里，高度落差約 300 公尺）。<br><br><strong>⚠️ 貼心提醒：</strong>瀑布水量大時會像淋雨一樣，請務必準備防水外套/輕便雨衣與防滑鞋。" },
+                { type: 'transport', text: "⬇️ 移動方式：步行或搭接駁車下山" },
+                { type: 'location', name: "🍕 咖哩村高熱量午餐", address: "Curry Village, Yosemite Valley, CA 95389", note: "下山後直接在 Curry Village 大快朵頤披薩、漢堡或墨西哥料理，補充健行消耗的熱量。" },
+                { type: 'transport', text: "⬇️ 移動方式：搭接駁車至17號站" },
+                { type: 'location', name: "🪞 尋訪倒影：鏡湖", address: "Mirror Lake Trailhead, Yosemite Valley, CA 95389",image: "https://i.postimg.cc/QC4Wvwtx/4649e629-99c3-4536-9453-8a4b6cf70e2d.jpg", note: "這是一段相對平緩好走的步道（走到湖邊往返約 3.2 公里）。在水量充沛的季節，這裡能拍到半圓丘近乎完美的平靜倒影。" },
+                { type: 'location', name: "🌅 谷地自由活動 / 享用晚餐", address: "Yosemite Valley, CA", note: "結束一天的健行，在谷地內放鬆休息，準備享用晚餐。" }
+            ]
+        },
+        day4: {
+            tabDay: "Day 4",
+            tabDate: "June 11",
+            title: "Day 4: 告別神木・返回灣區",
+            items: [
+                { type: 'location', name: "退房出發，驅車南下", address: "Mariposa, CA 95338", note: "從谷地退房，沿 41 號公路往公園南口" },
+                { type: 'location', name: "馬里波薩林地迎賓中心", address: "Mariposa Grove Welcome Plaza, Fish Camp, CA 95323", note: "停車換乘免費接駁車進入保護區" },
+                { type: 'location', name: "漫步「灰熊巨木環線步道」", address: "Grizzly Giant, Yosemite National Park, CA 95389",image: "https://i.postimg.cc/bwTd54Bb/5418648A-92C3-E20A-C97F3EEFCF406AFF.jpg", note: "觀賞 3,000 年樹齡巨杉與加州隧道樹" },
+                { type: 'location', name: "啟程返航 (往舊金山灣區)", address: "Oakhurst, CA 93644", note: "在 Oakhurst 小鎮享用午餐後，踏上歸途前往灣區" },
+                { type: 'location', name: "🏠 入住灣區住宿", address: "86 Cambridge Ave, San Leandro, CA 94577", note: "抵達 San Leandro 辦理入住，卸下行李" },
+                { 
+                    type: 'location',
+                    name: "住宿周邊放鬆", 
+                    address: "San Leandro, CA", 
+                    note: "抵達住宿後，可至附近商場逛街或前往海濱欣賞夕陽。",
+                    subOptions: [
+                        { name: "Marina Park", desc: "海濱夕陽漫步 🌊", address: "Marina Park, San Leandro, CA 94577", icon: "📍" },
+                        { name: "Marina Square Center", desc: "周邊商場購物", address: "Marina Square Center, San Leandro, CA 94577", icon: "🛍️" }
+                    ]
+                }
+            ]
+        },
+        day5: {
+            tabDay: "Day 5",
+            tabDate: "June 12",
+            title: "Day 5: 舊金山景點與大聯盟之夜",
+            items: [
+                { 
+                    type: 'location',
+                    name: "🌉 金門大橋 (免費停車)", 
+                    address: "Golden Gate Bridge, CA", 
+                    image: "https://i.postimg.cc/TYmXhmjM/IMG-6045.jpg",
+                    note: "舊金山必訪地標！建議導航至以下免費停車點：",
+                    subOptions: [
+                        { name: "Welcome Center", desc: "遊客中心周邊免費停車", address: "Golden Gate Bridge Welcome Center", icon: "🅿️" },
+                        { name: "Battery Spencer", desc: "絕佳高處俯瞰視角", address: "Battery Spencer, Conzelman Rd, Sausalito, CA", icon: "📸" }
+                    ]
+                },
+                { type: 'location', name: "🏛️ 舊金山藝術宮", address: "3301 Lyon St, San Francisco, CA 94123", image: "https://i.postimg.cc/KjQFvyS6/Palace-of-Fine-Arts-(16794p).jpg",note: "漫步於古羅馬風格的圓頂建築與人工湖畔" },
+                { 
+                    type: 'location',
+                    name: "🅿️ 停妥車輛，轉大眾運輸", 
+                    address: "San Francisco, CA", 
+                    note: "逛完大橋與藝術宮後，將車停在此，後續搭車移動。",
+                    subOptions: [
+                        { name: "Golden Gateway Garage", desc: "⭐⭐⭐ 首選！單日上限約 $32-$35", address: "250 Clay St, San Francisco, CA 94111", icon: "🚗" },
+                        { name: "Pier 19.5 / Pier 27 Parking", desc: "⭐⭐ 備案！單日約 $25-$30，門口有電車站", address: "19.5 The Embarcadero, San Francisco, CA 94111", icon: "🚙" }
+                    ]
+                },
+                { type: 'transport', text: "⬇️ 移動方式：乘復古路面電車 Muni F Line" },
+                { type: 'location', name: "🦭 漁人碼頭", address: "Fisherman's Wharf, San Francisco, CA",image: "https://i.postimg.cc/J7SSZnKn/IMG-6046.jpg", note: "看海獅曬太陽、Biscoff 咖啡店 ☕" },
+                { type: 'transport', text: "⬇️ 移動方式：從附近的Hyde St&Beach St搭乘Powell-Hyde線叮叮車上山(或選擇 Uber)" },
+                { type: 'location', name: "🎬 盜夢空間街道", address: "California St, San Francisco, CA",image: "https://i.postimg.cc/sggP2PSW/IMG-6044.jpg", note: "感受視覺震撼的極陡坡！" },
+                { type: 'transport', text: "⬇️ 移動方式：順著 California St 一路往下步行" },
+                { type: 'location', name: "🚢 渡輪大廈", address: "1 Ferry Building, San Francisco, CA 94111", image: "https://i.postimg.cc/BvDjZthH/Hudson-Ferry-Building-v01-A03-web-e1673549910651.jpg",note: "漫步舊金山水岸，逛逛在地市集" },
+                { type: 'transport', text: "⬇️ 移動方式：從渡輪大廈搭Muni(T或N線)10分鐘直達，或沿水岸步道走25分鐘" },
+                { type: 'location', name: "⚾ Oracle Park (18:00 巨人VS小熊)", address: "24 Willie Mays Plaza, San Francisco, CA 94107", image: "https://i.postimg.cc/Qd781wpT/frszertac4polxuqoexl.jpg",note: "享受大聯盟熱血賽事" }
+            ]
+        },
+        day6: {
+            tabDay: "Day 6",
+            tabDate: "June 13",
+            title: "Day 6: 世足狂熱與史丹佛巡禮",
+            items: [
+                { 
+                    type: 'location', 
+                    name: "⚽️ 觀賞世足賽：瑞士 VS 卡達", 
+                    address: "Levi's Stadium, 4900 Marie P DeBartolo Way, Santa Clara, CA 95054", 
+                    note: "⏰ 8:00出門。建議將車停在Great Mall，步行至輕軌站買VTA（車票來回約 $5）。搭乘橘線(Orange Line)約20-25分鐘，直達球場正門口下車。",
+                    subOptions: [
+                        { name: "Great Mall 購物中心", desc: "建議停車轉乘點", address: "447 Great Mall Dr, Milpitas, CA 95035", icon: "🅿️" }
+                    ]
+                },
+                { type: 'transport', text: "⬇️ 移動方式：開車" },
+                { 
+                    type: 'location',
+                    name: "🎓 史丹佛大學校園巡禮", 
+                    address: "Stanford University, Stanford, CA", 
+                    note: "必訪景點：<br>▪️Bookstore 🕙10:00-18:00<br>▪️Palm Drive<br>▪️Main Quad<br>▪️Memorial Church<br>▪️Hoover Tower<br><br>推薦停車點：",
+                    subOptions: [
+                        { name: "假日免費停車", desc: "436 Mayfield Ave", address: "436 Mayfield Ave, Stanford, CA", icon: "🅿️" },
+                        { name: "Stanford Visitor Center", desc: "遊客中心停車", address: "Stanford Visitor Center, Stanford, CA", icon: "🚗" }
+                    ]
+                },
+                { 
+                    type: 'location',
+                    name: "🛍️ 史丹佛周邊美食與購物", 
+                    address: "Palo Alto, CA", 
+                    note: "逛完校園後，到周邊商圈享用美食與血拚！",
+                    subOptions: [
+                        { name: "史丹佛購物中心", desc: "Stanford Shopping Center", address: "Stanford Shopping Center, Palo Alto, CA", icon: "🛍️" },
+                        { name: "大學大道 (University Ave)", desc: "必吃 Salt & Straw 冰淇淋 🍦", address: "University Ave, Palo Alto, CA", icon: "📍" },
+                        { name: "Town & Country Village", desc: "買 Trader Joe's & 吃 Gott's 漢堡 🍔", address: "Town & Country Village, Palo Alto, CA", icon: "🍔" }
+                    ]
+                }
+            ]
+        },
+        day7: {
+            tabDay: "Day 7",
+            tabDate: "June 14",
+            title: "Day 7: 逛爆 OUTLET!",
+            items: [
+                { 
+                    type: 'location',
+                    name: "🛍️ San Francisco Premium Outlets", 
+                    address: "2774 Livermore Outlets Dr, Livermore, CA 95341", 
+                    note: "🕙 10:00 準時開門抵達！這是一座擁有超過 180 家商店的大型戶外 Outlet。<br><br>✨ <strong>人氣必逛品牌：</strong><br>▪️ Prada<br>▪️ Gucci<br>▪️ Burberry<br>▪️ Coach<br>▪️ Kate Spade<br>▪️ Nike<br>▪️ Polo Ralph Lauren<br>▪️ The North Face",
+                    subOptions: [
+                        { name: "官方商場地圖 (PDF)", desc: "點擊開啟/下載地圖，方便規劃路線", address: "https://www.premiumoutlets.com/outlet/san-francisco/map", icon: "🗺️" },
+                        { name: "完整進駐品牌總覽", desc: "點擊前往官網查看所有商店目錄與最新折扣", address: "https://www.premiumoutlets.com/outlet/san-francisco/stores", icon: "🏷️" },
+                        { name: "Outlet 停車場導航", desc: "直接導航至商場停車區", address: "San Francisco Premium Outlets Parking, Livermore, CA", icon: "🅿️" }
+                    ]
+                }
+            ]
+        },
+        day8: {
+            tabDay: "Day 8",
+            tabDate: "June 15",
+            title: "Day 8: 柏克萊巡禮與滿載歸途 ✈️",
+            items: [
+                { 
+                    type: 'location',
+                    name: "🎓 加州大學柏克萊分校 (UC Berkeley)", 
+                    address: "University of California, Berkeley, CA", 
+                    note: "校園巡禮必訪景點：<br>▪️ Sather Gate (經典校門)<br>▪️ Cal store (買紀念品)<br>▪️ Valley Life Sciences Building (VLSB) - 可看恐龍化石 🦖<br>▪️ 加州紀念體育場 (California Memorial Stadium)<br>▪️ Doe 圖書館<br>▪️ Telegraph Avenue - 充滿二手書店與黑膠唱片 🎶",
+                    subOptions: [
+                        { name: "Telegraph Channing Garage", desc: "首推！有警衛，第一小時免費，後續 $2/hr。", address: "2501 Channing Way, Berkeley, CA 94704", icon: "🅿️" },
+                        { name: "Soda Hall 北側街邊", desc: "備案：停在校外街邊，位置相對安全。", address: "Soda Hall, Berkeley, CA", icon: "🚙" },
+                        { name: "💡 停車繳費 SOP 提醒", desc: "入場取票保管好。離場前先到繳費機插票付款，【付款後記得把票拿回來】，開車到出口再刷一次票才能出去！千萬別中途把票丟了！", address: "#", icon: "⚠️" }
+                    ]
+                },
+                { 
+                    type: 'alert', 
+                    text: "⚠️ 14:00 前往機場", 
+                    subtext: "最晚 14:00 務必上車出發，開車跨越海灣大橋往南推進！預留足夠時間防塞車。" 
+                },
+                { 
+                    type: 'location',
+                    name: "📦 The Shops at Tanforan 最終打包", 
+                    address: "1150 El Camino Real, San Bruno, CA 94066", 
+                    note: "15:00 抵達舊金山機場旁邊的購物中心。在停車場把這幾天的戰利品塞進托運行李，做最終打包！"
+                },
+                { 
+                    type: 'location',
+                    name: "⛽ 加滿油並還車", 
+                    address: "SFO Rental Car Center, 780 N McDonnell Rd, San Francisco, CA 94128", 
+                    note: "17:30 順利加滿油並在機場還車，搭乘 AirTrain 前往國際航廈。"
+                },
+                { 
+                    type: 'location',
+                    name: "🛫 抵達報到櫃檯", 
+                    address: "San Francisco International Airport, CA", 
+                    note: "19:00 抵達報到櫃檯，完美結束美西之旅！"
+                }
+            ]
+        }
+    };
+
+    let currentDay = 'day1';
+
+    function showPage(page) {
+            const container = document.getElementById('content-area');
+            const navItinerary = document.getElementById('nav-itinerary');
+            const navTools = document.getElementById('nav-tools');
+
+            navItinerary.classList.remove('tab-active');
+            navTools.classList.remove('tab-active');
+
+            if (page === 'itinerary') {
+                navItinerary.classList.add('tab-active');
+                renderItinerary(container, currentDay);
+            } else {
+                navTools.classList.add('tab-active');
+                renderTools(container);
+            }
+    }
+
+    function renderItinerary(container, dayKey = 'day1') {
+        currentDay = dayKey;
+        
+        let html = `
+            <div class="flex gap-4 mb-8 overflow-x-auto pb-4 scrollbar-hide px-1">
+                ${Object.keys(itinerary).map(key => `
+                    <button onclick="renderItinerary(document.getElementById('content-area'), '${key}')" 
+                            class="flex flex-col items-center justify-center w-20 h-20 rounded-2xl flex-shrink-0 transition-all duration-200 ${currentDay === key ? 'bg-[#5c544d] text-white shadow-lg scale-105' : 'sticker-card hover:-translate-y-1 hover:shadow-md'}">
+                        <span class="font-bold text-lg">${itinerary[key].tabDay}</span>
+                        <span class="text-xs mt-1 ${currentDay === key ? 'text-stone-300' : 'text-stone-500'}">${itinerary[key].tabDate}</span>
+                    </button>
+                `).join('')}
+            </div>
+        `;
+
+        const dayData = itinerary[currentDay];
+        html += `<h2 class="text-xl font-bold border-b-2 border-stone-300 pb-2 mb-4">${dayData.title}</h2>
+                 <div class="relative timeline-line space-y-6">`;
+        
+        dayData.items.forEach(item => {
+            if (item.type === 'location') {
+                html += `
+                        <div class="ml-8 p-4 sticker-card relative">
+                            <div class="absolute -left-5 top-4 w-4 h-4 rounded-full bg-[#5c544d] border-2 border-white"></div>
+                            <h3 class="font-bold text-lg">${item.name}</h3>
+                            <p class="text-xs mb-2 opacity-70">📍 ${item.address}</p>
+                `;
+
+                if (item.image) {
+                    html += `
+                            <div class="mb-3 rounded-xl overflow-hidden shadow-sm border border-stone-100 aspect-square">
+                                <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+                            </div>
+                    `;
+                }
+
+                html += `
+                            <p class="text-sm italic text-stone-600 mb-3">${item.note}</p>
+                `;
+
+                if (item.subOptions) {
+                    html += `<div class="mt-3 flex flex-col gap-3">`;
+                    item.subOptions.forEach(sub => {
+                        const linkHref = sub.address.startsWith('http') ? sub.address : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(sub.address)}`;
+                        html += `
+                            <a href="${linkHref}" target="_blank" 
+                               class="flex items-center p-3 rounded-xl border border-stone-200 bg-[#fdfbf7] hover:bg-white transition-all shadow-sm hover:shadow-md hover:-translate-y-1 cursor-pointer">
+                                <span class="text-2xl mr-3">${sub.icon}</span>
+                                <div>
+                                    <h4 class="font-bold text-sm text-[#5c544d]">${sub.name}</h4>
+                                    <p class="text-xs text-stone-500 mt-0.5">${sub.desc}</p>
+                                </div>
+                            </a>
+                        `;
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `
+                            <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(item.address)}" target="_blank" 
+                               class="inline-block bg-[#f0ede5] hover:bg-[#e0dcd0] px-3 py-1 rounded-full text-xs font-bold transition">
+                               🚗 點擊導航
+                            </a>
+                    `;
+                }
+                html += `</div>`;
+            } else if (item.type === 'transport') {
+                html += `
+                    <div class="ml-8 relative flex justify-center py-2">
+                        <div class="bg-[#f0ede5] border border-[#e5e5e5] px-4 py-2 rounded-full text-xs font-bold text-[#5c544d] shadow-sm z-10 text-center w-full max-w-[80%] break-words">
+                            ${item.text}
+                        </div>
+                    </div>
+                `;
+            } else if (item.type === 'alert') {
+                html += `
+                    <div class="ml-8 p-4 sticker-card relative bg-[#fff5f5] border-[#feb2b2] shadow-sm">
+                        <div class="absolute -left-5 top-4 w-4 h-4 rounded-full bg-red-500 border-2 border-white animate-pulse"></div>
+                        <h3 class="font-bold text-lg text-red-600">${item.text}</h3>
+                        <p class="text-sm text-red-500 mt-1 font-medium">${item.subtext}</p>
+                    </div>
+                `;
+            }
+        });
+        html += `</div>`;
+        container.innerHTML = html;
+    }
+
+    function renderTools(container) {
+            container.innerHTML = `
+                <div class="sticker-card p-6">
+                    <h2 class="text-xl font-bold mb-4">💰 旅費匯率計算機</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold mb-1">消費金額 (USD)</label>
+                            <input type="number" id="usd-amt" oninput="calc()" class="w-full p-3 border-2 border-stone-200 rounded-lg" placeholder="例如: 100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-2">州稅 (%)</label>
+                            <div class="flex gap-2 mb-3">
+                                <button onclick="setTax(8.625)" class="flex-1 bg-[#f0ede5] hover:bg-[#e0dcd0] px-3 py-2 rounded-lg text-xs font-bold transition text-center shadow-sm text-[#5c544d]">📍 舊金山 8.625%</button>
+                                <button onclick="setTax(10.25)" class="flex-1 bg-[#f0ede5] hover:bg-[#e0dcd0] px-3 py-2 rounded-lg text-xs font-bold transition text-center shadow-sm text-[#5c544d]">🛍️ Livermore 10.25%</button>
+                            </div>
+                            <input type="number" id="tax-rate" step="0.001" oninput="calc()" class="w-full p-3 border-2 border-stone-200 rounded-lg" value="8.625">
+                        </div>
+                        <div class="pt-4 border-t border-stone-100">
+                            <p class="text-sm">實付金額: <span id="total-usd" class="font-bold text-lg">0</span> USD</p>
+                            <p class="text-sm">換算台幣: <span id="total-twd" class="font-bold text-lg text-[#5c544d]">0</span> TWD</p>
+                            <p class="text-[10px] opacity-50 mt-2">*匯率以 1 USD = 32.5 TWD 參考計算</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setTax(rate) {
+            document.getElementById('tax-rate').value = rate;
+            calc();
+        }
+
+        function calc() {
+            const usd = parseFloat(document.getElementById('usd-amt').value) || 0;
+            const tax = parseFloat(document.getElementById('tax-rate').value) || 0;
+            const totalUsd = usd * (1 + tax / 100);
+            document.getElementById('total-usd').innerText = totalUsd.toFixed(2);
+            document.getElementById('total-twd').innerText = (totalUsd * 32.5).toFixed(0);
+        }
+
+        // Initialize
+        showPage('itinerary');
+    </script>
+</body>
+</html>
+    
+  </body>
+  
+</html>
