@@ -64,6 +64,7 @@
         <nav class="flex justify-center gap-4 mb-8">
             <button id="nav-itinerary" onclick="showPage('itinerary')" class="px-6 py-2 rounded-full sticker-card tab-active">🗺️ 行程</button>
             <button id="nav-tools" onclick="showPage('tools')" class="px-6 py-2 rounded-full sticker-card">💵 匯率換算</button>
+            <button id="nav-weather" onclick="showPage('weather')" class="px-6 py-2 rounded-full sticker-card">🌤️ 天氣預報</button>
         </nav>
 
         <div id="content-area">
@@ -293,16 +294,21 @@
             const container = document.getElementById('content-area');
             const navItinerary = document.getElementById('nav-itinerary');
             const navTools = document.getElementById('nav-tools');
+            const navWeather = document.getElementById('nav-weather');
 
             navItinerary.classList.remove('tab-active');
             navTools.classList.remove('tab-active');
+            navWeather.classList.remove('tab-active');
 
             if (page === 'itinerary') {
                 navItinerary.classList.add('tab-active');
                 renderItinerary(container, currentDay);
-            } else {
+            } else if (page === 'tools') {
                 navTools.classList.add('tab-active');
                 renderTools(container);
+            } else if (page === 'weather') {
+                navWeather.classList.add('tab-active');
+                renderWeather(container);
             }
     }
 
@@ -396,7 +402,7 @@
     function renderTools(container) {
             container.innerHTML = `
                 <div class="sticker-card p-6">
-                    <h2 class="text-xl font-bold mb-4">💰 旅費匯率計算機</h2>
+                    <h2 class="text-xl font-bold mb-4">💰 匯率計算機</h2>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-bold mb-1">消費金額 (USD)</label>
@@ -418,9 +424,38 @@
                     </div>
                 </div>
             `;
-        }
+    }
 
-        function setTax(rate) {
+    function renderWeather(container) {
+        container.innerHTML = `
+            <div class="sticker-card p-6">
+                <h2 class="text-xl font-bold text-[#5c544d] mb-6 flex items-center">
+                    <span>🌤️天氣預報</span>
+                </h2>
+                <div class="flex flex-col gap-8">
+                    <div>
+                        <h3 class="text-md font-semibold text-gray-700 mb-2">🌉 舊金山 San Francisco</h3>
+                        <a class="weatherwidget-io" href="https://forecast7.com/zh-tw/37d77n122d42/san-francisco/" data-label_1="舊金山" data-label_2="天氣預報" data-theme="pure" >舊金山 天氣預報</a>
+                    </div>
+                    <div>
+                        <h3 class="text-md font-semibold text-gray-700 mb-2">🏔️ 優勝美地 Yosemite</h3>
+                        <a class="weatherwidget-io" href="https://forecast7.com/zh-tw/37d75n119d59/yosemite-valley/" data-label_2="天氣預報" data-theme="pure" >優勝美地 天氣預報</a>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        const oldScript = document.getElementById('weatherwidget-io-js');
+        if (oldScript) {
+            oldScript.remove();
+        }
+        const script = document.createElement('script');
+        script.id = 'weatherwidget-io-js';
+        script.src = 'https://weatherwidget.io/js/widget.min.js';
+        document.body.appendChild(script);
+    }
+
+    function setTax(rate) {
             document.getElementById('tax-rate').value = rate;
             calc();
         }
